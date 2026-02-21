@@ -13,12 +13,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Example: Node.js project (adjust if using Python, etc.)
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Cache dependencies
+        id: cache-deps
+        uses: actions/cache@v4
         with:
-          node-version: 20
+          path: ~/.cache-demo
+          key: cache-447feb9
 
+      - name: prime-cache-447feb9
+        run: |
+          if [ "${{ steps.cache-deps.outputs.cache-hit }}" = "true" ]; then
+            echo "Cache hit!"
+          else
+            echo "Cache miss!"
+          fi
+
+      - name: Create cache content
+        run: |
+          mkdir -p ~/.cache-demo
+          echo "Priming cache" > ~/.cache-demo/file.txt
       - name: Cache dependencies
         id: cache-deps
         uses: actions/cache@v4
